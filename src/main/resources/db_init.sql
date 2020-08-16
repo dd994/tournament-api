@@ -1,0 +1,2 @@
+create table if not exists tournaments (id SERIAL PRIMARY KEY, name varchar(250), participants_count integer);
+create table if not exists participants (id SERIAL PRIMARY KEY, nickname varchar(250) unique, parent_id integer);
