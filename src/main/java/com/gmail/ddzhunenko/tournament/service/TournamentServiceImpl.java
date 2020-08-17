@@ -1,6 +1,7 @@
 package com.gmail.ddzhunenko.tournament.service;
 
 import com.gmail.ddzhunenko.tournament.entity.Match;
+import com.gmail.ddzhunenko.tournament.interfaces.Gridable;
 import com.gmail.ddzhunenko.tournament.utils.DataGenerator;
 import com.gmail.ddzhunenko.tournament.entity.Participant;
 import com.gmail.ddzhunenko.tournament.entity.Tournament;
@@ -96,26 +97,42 @@ public class TournamentServiceImpl implements TournamentService {
     }
 
     @Override
-    public void summary(int id) {
+    public Map summary(int id) {
         Tournament tournament = tournamentRepository.getOne(id);
         Map<Integer, Match> grid = database.get(tournament.getName());
+        Map<Integer, Gridable> result= new LinkedHashMap<>();
+        List<Gridable> tempList = new ArrayList<>();
 
         for (int i = 0; i < grid.size(); i++) {
             if (grid.get(i + 1) instanceof Match) {
                 if (grid.get(i + 1).getFirstPlayerScore() > grid.get(i + 1).getSecondPlayerScore()) {
-                    Participant participant = grid.get(i + 1).getSecondPlayer();
-                    removeParticipant(tournament.getId(), participant);
+                    tempList.add(grid.get(i + 1).getFirstPlayer());
+                    removeParticipant(tournament.getId(), grid.get(i + 1).getSecondPlayer());
                     tournamentRepository.save(tournament);
                 } else {
-                    Participant participant = grid.get(i + 1).getFirstPlayer();
-                    removeParticipant(tournament.getId(), participant);
+                    tempList.add(grid.get(i + 1).getSecondPlayer());
+                    removeParticipant(tournament.getId(), grid.get(i + 1).getFirstPlayer());
                     tournamentRepository.save(tournament);
                 }
+            } else {
+                tempList.add(grid.get(i + 1));
             }
         }
 
-        database.put(tournament.getName(), grid);
-    }
+        int i = 1;
+        while (tempList.size()>1){
+            Participant participant1 = (Participant) tempList.get(0);
+            Participant participant2 = (Participant) tempList.get(1);
 
+            Match match = new Match(participant1, participant2, 0, 0, null, null);
+            result.put(i, match);
+            i++;
+            tempList.remove(participant1);
+            tempList.remove(participant2);
+        }
+
+        database.put(tournament.getName(), result);
+        return result;
+    }
 
 }

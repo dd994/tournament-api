@@ -29,6 +29,15 @@ public class Tournament implements Serializable {
     @Column(name = "participants_count")
     private int participantsCount;
 
+    public Tournament(String name) {
+        this.name = name;
+    }
+
+    public Tournament(int id,String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonManagedReference
     private List<Participant> participants = new ArrayList<>();
@@ -46,6 +55,6 @@ public class Tournament implements Serializable {
     }
 
     public int getParticipantsCount() {
-        return getParticipants().size();
+        return participants.size();
     }
 }

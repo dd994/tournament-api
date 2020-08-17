@@ -15,6 +15,6 @@ public interface TournamentService {
     List getAllParticipants(int id);
     Map getGrid(int id);
     Map getResultGrid(int id);
-    void summary(int id);
+    Map summary(int id);
 
 }

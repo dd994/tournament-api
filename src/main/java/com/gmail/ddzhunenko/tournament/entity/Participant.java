@@ -33,6 +33,14 @@ public class Participant implements Serializable, Gridable {
     @JsonBackReference
     private Tournament tournament;
 
+    public Participant(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
     // only by nickname comparing
     @Override
     public boolean equals(Object o) {

@@ -11,10 +11,10 @@ public class DataGenerator {
 
     private final int multiple = 8;
 
-    public Map setGrid(Tournament tournament) {
+    public Map<Integer, Gridable> setGrid(Tournament tournament) {
 
         Map<String, Integer> counts = getEliminationTypeCounts(tournament.getParticipantsCount());
-        Map<Integer, Gridable> map = new HashMap<>();
+        Map<Integer, Gridable> map = new LinkedHashMap<>();
 
         List<Participant> nicknames = tournament.getParticipants();
 

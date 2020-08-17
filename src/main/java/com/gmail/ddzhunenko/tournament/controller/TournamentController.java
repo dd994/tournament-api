@@ -30,10 +30,10 @@ public class TournamentController {
     @GetMapping("/get/{id}")
     public Optional<Tournament> getTournament(@PathVariable("id") int id) {
         return tournamentService.getTournament(id);
-    }
+}
 
     @PostMapping("/{id}/participants/add")
-    public ResponseEntity<Participant> add(@PathVariable("id") int id, @RequestBody Participant participant) {
+    public ResponseEntity<Participant> addParticipant(@PathVariable("id") int id, @RequestBody Participant participant) {
         tournamentService.addParticipant(id, participant);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -41,7 +41,7 @@ public class TournamentController {
     }
 
     @PostMapping("/{id}/participants/del")
-    public ResponseEntity<Participant> del(@PathVariable("id") int id, @RequestBody Participant participant) {
+    public ResponseEntity<Participant> delParticipant(@PathVariable("id") int id, @RequestBody Participant participant) {
         tournamentService.removeParticipant(id, participant);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -64,9 +64,8 @@ public class TournamentController {
     }
 
     @GetMapping("/{id}/summary")
-    public String summary(@PathVariable("id") int id) {
-        tournamentService.summary(id);
-        return "Refreshed, get new grid";
+    public Map summary(@PathVariable("id") int id) {
+        return tournamentService.summary(id);
     }
 
 }
